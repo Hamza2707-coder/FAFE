@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Interactive</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #1a1a1a;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .background-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+
+      // .background-image {
+         //   position: absolute;
+           // top: 0;
+           // left: 0;
+           // width: 100%;
+          //  height: 100%;
+          //  background-size: cover;
+          //  background-position: center;
+            /* Add your image here */
+            /* background-image: url('your-image.jpg'); */
+          //  animation: zoomInOut 20s ease infinite;
+     //   } 
+
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 51, 102, 0.5), rgba(186, 38, 93, 0.5));
+            animation: fadeInOut 8s ease infinite;
+        }
+
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 15s infinite linear;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes zoomInOut {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        @keyframes fadeInOut {
+
+            0%,
+            100% {
+                opacity: 0.5;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .letters-container {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .letter {
+            font-size: 6rem;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            user-select: none;
+        }
+
+        .letter:hover {
+            transform: scale(1.2);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        .letter.active {
+            color: #ff3366;
+            text-shadow: 0 0 20px rgba(255, 51, 102, 0.8);
+            transform: scale(1.1);
+        }
+
+        .heart {
+            width: 60px;
+            height: 60px;
+            background: #ff3366;
+            position: relative;
+            transform: rotate(45deg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: heartbeat 1.5s ease infinite;
+            z-index: 3;
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            width: 60px;
+            height: 60px;
+            background: #ff3366;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart::before {
+            left: -30px;
+        }
+
+        .heart::after {
+            top: -30px;
+        }
+
+        .heart:hover {
+            transform: rotate(45deg) scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 51, 102, 0.7);
+        }
+
+        @keyframes heartbeat {
+            0% {
+                transform: rotate(45deg) scale(1);
+            }
+
+            14% {
+                transform: rotate(45deg) scale(1.1);
+            }
+
+            28% {
+                transform: rotate(45deg) scale(1);
+            }
+
+            42% {
+                transform: rotate(45deg) scale(1.1);
+            }
+
+            70% {
+                transform: rotate(45deg) scale(1);
+            }
+        }
+
+        @media (max-width: 1080px) and (max-height: 2400px) {
+            .letter {
+                font-size: 5rem;
+            }
+
+            .container {
+                gap: 5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .letter {
+                font-size: 4rem;
+            }
+
+            .heart {
+                width: 40px;
+                height: 40px;
+            }
+
+            .heart::before,
+            .heart::after {
+                width: 40px;
+                height: 40px;
+            }
+
+            .heart::before {
+                left: -20px;
+            }
+
+            .heart::after {
+                top: -20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-wrapper">
+        <video class="background-video" autoplay muted loop>
+            <source src="fireplace.mp4" type="video/mp4">
+        </video>
+        <div class="background-overlay"></div>
+        <div class="floating-particles" id="particles"></div>
+    </div>
+    <div class="container">
+        <div class="letters-container">
+            <div class="letter" data-sound="sound-l">L</div>
+            <div class="letter" data-sound="sound-o">O</div>
+            <div class="letter" data-sound="sound-v">V</div>
+            <div class="letter" data-sound="sound-e">E</div>
+        </div>
+        <div class="heart"></div>
+    </div>
+
+    <script>
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 100; 
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+
+          
+                const size = Math.random() * 5 + 3;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+
+          
+                particle.style.left = `${Math.random() * 100}%`;
+
+        
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+
+                container.appendChild(particle);
+            }
+        }
+
+        const sounds = {
+            'sound-l': null,
+            'sound-o': null,
+            'sound-v': null,
+            'sound-e': null,
+            'heart': null
+        };
+
+        function initializeAudio() {
+            const soundPaths = {
+                'sound-l': 'l.mp3',
+                'sound-o': 'o.mp3',
+                'sound-v': 'v.mp3',
+                'sound-e': 'e.mp3',
+                'heart': 'love.mp3'
+            };
+
+            for (const [key, path] of Object.entries(soundPaths)) {
+                sounds[key] = new Audio(path);
+            }
+        }
+
+        function resetLetters() {
+            document.querySelectorAll('.letter').forEach(l => l.classList.remove('active'));
+        }
+
+   
+        document.querySelectorAll('.letter').forEach(letter => {
+            letter.addEventListener('click', function (e) {
+                e.stopPropagation();
+                resetLetters(); 
+
+              
+                const soundKey = this.dataset.sound;
+                if (sounds[soundKey]) {
+                    Object.values(sounds).forEach(sound => {
+                        if (sound) {
+                            sound.pause();
+                            sound.currentTime = 0;
+                        }
+                    });
+                    sounds[soundKey].play();
+                }
+
+             
+                this.classList.add('active');
+            });
+        });
+
+     
+        document.addEventListener('click', resetLetters);
+
+     
+        document.querySelector('.heart').addEventListener('click', function (e) {
+            e.stopPropagation();
+            resetLetters(); 
+
+            if (sounds['heart']) {
+                sounds['heart'].play();
+            }
+
+            this.style.animation = 'none';
+            this.offsetHeight; 
+            this.style.animation = null;
+        });
+
+        createParticles();
+
+        setInterval(function () {
+            const container = document.getElementById('particles');
+            container.innerHTML = ''; 
+            createParticles(); 
+        }, 15000);
+
+         initializeAudio();
+    </script>
+</body>
+
+</html>
